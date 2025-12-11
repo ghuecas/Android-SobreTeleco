@@ -28,7 +28,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -40,22 +42,23 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             SobreTelecoTheme {
-                sobreTelecoUI(tag= this.tag)
+                SobreTelecoUI(tag= this.tag)
             }
         }
     }
 }
 
 @Composable
-fun sobreTelecoUI(modifier: Modifier = Modifier, tag: String?) {
+fun SobreTelecoUI(modifier: Modifier = Modifier, tag: String?) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     var changed by remember { mutableStateOf(false) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) { innerPadding ->
 
         Column ( modifier = Modifier
@@ -72,7 +75,7 @@ fun sobreTelecoUI(modifier: Modifier = Modifier, tag: String?) {
                 painter = painterResource(
                     if (changed) R.drawable.etsit_a else R.drawable.etsit_b
                 ),
-                contentDescription = "Imagen",
+                contentDescription = stringResource(id = R.string.image_content_description),
                 modifier = Modifier
                     //.size(150.dp)
                     .fillMaxWidth()
@@ -90,12 +93,12 @@ fun sobreTelecoUI(modifier: Modifier = Modifier, tag: String?) {
                 onClick = {
                     changed = !changed
 
-                    Log.i(tag, "Cambiamos imagen" + if (changed) " a original" else " a alternativa" )
+                    Log.i(tag, "Cambiamos imagen" + if (changed) " a original" else " a alternativa")
 
                     scope.launch {
                         val result = snackbarHostState.showSnackbar(
-                            message = "Imagen cambiada",
-                            actionLabel = "Deshacer",
+                            message = context.getString(R.string.snackbar_image_changed),
+                            actionLabel = context.getString(R.string.snackbar_undo),
                             withDismissAction = true,
                             duration = SnackbarDuration.Short
                         )
@@ -107,7 +110,7 @@ fun sobreTelecoUI(modifier: Modifier = Modifier, tag: String?) {
                     }
                 }
             ) {
-                Text("Cambiar imagen")
+                Text(stringResource(id = R.string.button_change_image))
             }
         }
     }
@@ -117,6 +120,6 @@ fun sobreTelecoUI(modifier: Modifier = Modifier, tag: String?) {
 @Composable
 fun GreetingPreview() {
     SobreTelecoTheme {
-        sobreTelecoUI(tag= "SobreTeleco: SB")
+        SobreTelecoUI(tag= stringResource(id = R.string.tag_preview))
     }
 }

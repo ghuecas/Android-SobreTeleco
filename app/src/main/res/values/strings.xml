@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SobreTeleco</string>
+    <string name="image_content_description">Imagen</string>
+    <string name="snackbar_image_changed">Imagen cambiada</string>
+    <string name="snackbar_undo">Deshacer</string>
+    <string name="button_change_image">Cambiar imagen</string>
+    <string name="tag_preview">SobreTeleco: SB</string>
 </resources>
